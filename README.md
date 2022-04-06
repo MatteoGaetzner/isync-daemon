@@ -47,18 +47,18 @@ Additionally make sure that:
 2. You have all required, with gnupg encrypted, mailbox passwords saved
 at the same location, e.g. `~/.password-store/`.
 
-# Usage 
+# Usage
 
 Run:
 
 ```
-python3 mailsync-daemon.py [options]
+./mailsync-daemon.py --quiet [options]
 ```
 
 For an overview regarding the available options, run:
 
 ```
-python3 mailsync-daemon.py -h
+./mailsync-daemon.py -h
 ```
 
 # Licensing
