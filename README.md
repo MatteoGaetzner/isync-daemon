@@ -1,3 +1,13 @@
+# Purpose
+
+Neomutt is an awesome terminal email client.
+Unfortunately I couldn't find a solution, which allowed me to enter a single
+master password, to enable mailbox synchonization for the whole session, without
+saving the mailbox passwords as plain text in a configuration file, or caching
+gpg credentials via the gnupg agent.
+I therefore modified isync to take credentials from stdin, and wrote a custom daemon
+that feeds in the necessary credentials.
+
 # Installation
 
 This daemon has been tested with python 3.10.3.
@@ -39,7 +49,7 @@ at the same location, e.g. `~/.password-store/`.
 
 # Usage
 
-`python3 mailsync-daemon.py [options]`
+for the entire session via the gnupg agent.`python3 mailsync-daemon.py [options]`
 
 For an overview regarding the available options, run:
 
