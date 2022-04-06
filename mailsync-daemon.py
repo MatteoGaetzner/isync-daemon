@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 """
 This daemon periodically runs mbsync to synchronize local copies of emails with their remote counterparts. 
 Copyright © 2022 Matteo Gätzner <m.gaetzner@gmx.de>
@@ -48,13 +50,15 @@ if cli_args.print_keys and not cli_args.quiet:
             print(f"{k}: {v}")
 
 # Get gpg password
-gpg_password = ''
 
-try:
-    gpg_password = getpass.getpass()
-except Exception as error:
-    if not cli_args.quiet:
-        print("Error: Couldn't get the gpg master password")
+gpg_password = cli_args.gpg_password
+if not gpg_password:
+    try:
+        gpg_password = getpass.getpass()
+    except Exception as error:
+        if not cli_args.quiet:
+            print("Error: Couldn't get the gpg master password")
+            exit(1)
 
 
 # Get credentials
