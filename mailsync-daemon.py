@@ -20,6 +20,8 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 from pathlib import Path
 from typing import Dict
+from daemonize import Daemonize
+import tempfile
 from time import sleep
 import gnupg
 import getpass
@@ -29,6 +31,8 @@ import isync_wrapper
 parser = MailsyncArgumentParser()
 
 cli_args = parser.get_args()
+
+pid = tempfile.mkstemp(prefix="mailsync_daemon")[1]
 
 # gpg initialization
 if cli_args.gpghome_path:
@@ -89,9 +93,14 @@ with open(mbsyncrc_path, 'r') as f:
 
 
 # Periodically invoke custom isync with the extracted credentials
-while True:
-    stdout_data = isync_wrapper.sync_all(
-        cli_args.mbsync_binary_path, credentials, cli_args.quiet)
-    if not cli_args.quiet:
-        print("mbsync: ", stdout_data)
-    sleep(cli_args.frequency)
+def main():
+    while True:
+        stdout_data = isync_wrapper.sync_all(
+            cli_args.mbsync_binary_path, credentials, cli_args.quiet)
+        if not cli_args.quiet:
+            print("mbsync: ", stdout_data)
+        sleep(cli_args.frequency)
+
+
+daemon = Daemonize(app="mainsync_daemon", pid=pid, action=main)
+daemon.start()

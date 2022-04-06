@@ -12,13 +12,13 @@ that feeds in the necessary credentials.
 
 This daemon has been tested with python 3.10.3.
 Other versions haven't been tested, but it likely still
-works with most python 3 versions since python-gnupg (a gpg wrapper for python)
-is its only dependency apart from mbsync (isync).
+works with most python 3 versions since `python-gnupg` (a gpg wrapper for python),
+and `daemonize` are its only dependencies apart from mbsync (isync).
 
-To install `python-gnupg`, run:
+To install `python-gnupg` and `daemonize`, run:
 
 ```
-pip install python-gnupg 
+pip install python-gnupg daemonize
 ```
 
 To set up Neomutt and offline email access with it, I recommend
@@ -47,7 +47,7 @@ Additionally make sure that:
 2. You have all required, with gnupg encrypted, mailbox passwords saved
 at the same location, e.g. `~/.password-store/`.
 
-# Usage
+# Usage 
 
 Run:
 
