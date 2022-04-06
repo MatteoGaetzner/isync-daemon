@@ -1,6 +1,6 @@
 """
 This daemon periodically runs mbsync to synchronize local copies of emails with their remote counterparts. 
-Copyright © 2022 yourname
+Copyright © 2022 Matteo Gätzner <m.gaetzner@gmx.de>
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

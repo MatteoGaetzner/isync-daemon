@@ -49,8 +49,29 @@ at the same location, e.g. `~/.password-store/`.
 
 # Usage
 
-for the entire session via the gnupg agent.`python3 mailsync-daemon.py [options]`
+Run:
+
+`python3 mailsync-daemon.py [options]`
 
 For an overview regarding the available options, run:
 
 `python3 mailsync-daemon.py -h`
+
+# Licensing
+
+This daemon periodically runs mbsync to synchronize local copies of emails with their remote counterparts.
+Copyright © 2022 Matteo Gätzner <m.gaetzner@gmx.de>
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, see <http://www.gnu.org/licenses/>.
+
