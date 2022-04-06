@@ -2,9 +2,9 @@
 
 Neomutt is an awesome terminal email client.
 Unfortunately I couldn't find a solution, which allowed me to enter a single
-master password, to enable mailbox synchonization for the whole session, without
+master password, to enable mailbox synchronization for the whole session, without
 saving the mailbox passwords as plain text in a configuration file, or caching
-gpg credentials via the gnupg agent.
+gpg credentials via the gpg agent.
 I therefore modified isync to take credentials from stdin, and wrote a custom daemon
 that feeds in the necessary credentials.
 
@@ -19,10 +19,9 @@ To install `python-gnupg`, run:
 
 ```
 pip install python-gnupg 
-
 ```
 
-To set up neomutt and offline email access with it, I recommend
+To set up Neomutt and offline email access with it, I recommend
 you to check out this fantastic project `https://github.com/LukeSmithxyz/mutt-wizard`.
 
 You will need a modified version of mbsync (isync) for this daemon to work, because
@@ -34,6 +33,7 @@ To install the compatible mbsync (isync) version, run:
 ```
 git clone git@github.com:MatteoGaetzner/isync-with-cli-passwords.git
 cd isync-with-cli-passwords
+
 ./autogen.sh 
 ./configure
 make
@@ -44,18 +44,22 @@ Additionally make sure that:
 
 1. You have not specified `Pass` or `PassCmd` in your `mbsyncrc` configuration file.
 
-2. You have all required, and with gnupg encrypted, mailbox passwords saved
+2. You have all required, with gnupg encrypted, mailbox passwords saved
 at the same location, e.g. `~/.password-store/`.
 
 # Usage
 
 Run:
 
-`python3 mailsync-daemon.py [options]`
+```
+python3 mailsync-daemon.py [options]
+```
 
 For an overview regarding the available options, run:
 
-`python3 mailsync-daemon.py -h`
+```
+python3 mailsync-daemon.py -h
+```
 
 # Licensing
 
