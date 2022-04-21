@@ -1,24 +1,28 @@
 import logging
-import os
 
 from systemd.journal import JournalHandler
 
-DEBUG = os.getenv("DEBUG_MAILSYNC") == "true"
+from config import config
 
-# TODO Add to (future) settings file
-APP_NAME = "mailsync-daemon"
+loglevelmap = {
+    "DEBUG": logging.DEBUG,
+    "INFO": logging.INFO,
+    "WARNING": logging.WARNING,
+    "ERROR": logging.ERROR,
+}
 
 # create logger
-logger = logging.getLogger(APP_NAME)
-logger.setLevel(logging.INFO if not DEBUG else logging.DEBUG)
+logger = logging.getLogger(config.logger_name)
+
+logger.setLevel(loglevelmap[config.log_level])
 
 # add handler
-if DEBUG != "true":
+if config.debug != "true":
     logger.addHandler(JournalHandler())
 
 # create console handler and set level to debug
 ch = logging.StreamHandler()
-ch.setLevel(logging.INFO if not DEBUG else logging.DEBUG)
+ch.setLevel(loglevelmap[config.log_level])
 
 # create formatter
 formatter = logging.Formatter("[%(levelname)s]  %(name)s  %(asctime)s:  %(message)s")

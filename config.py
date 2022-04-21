@@ -43,6 +43,24 @@ class MailsyncArgumentParser(argparse.ArgumentParser):
                 120,
                 int,
             ),
+            (
+                "--mbsync-timeout",
+                "time until the mbsync call timeouts (default: 120s)",
+                120,
+                int,
+            ),
+            (
+                "--log-level",
+                "logging level (default: 'INFO')",
+                "INFO",
+                str,
+            ),
+            (
+                "--logger-name",
+                "name of the logger (default: 'mailsync-daemon')",
+                "mailsync-daemon",
+                str,
+            ),
         ]
 
         arguments_bool = [
@@ -52,6 +70,11 @@ class MailsyncArgumentParser(argparse.ArgumentParser):
                 False,
             ),
             ("--quiet", "silence all outputs", False),
+            (
+                "--debug",
+                "run this daemon in debug mode (will set LOG_LEVEL='DEBUG'), this will make it run in the foreground",
+                False,
+            ),
         ]
 
         self.add_standard_arguments(arguments_std)
@@ -76,3 +99,13 @@ class MailsyncArgumentParser(argparse.ArgumentParser):
 
     def get_args(self) -> argparse.Namespace:
         return self.parse_args(sys.argv[1:])
+
+
+def process_config(config: argparse.Namespace) -> argparse.Namespace:
+    if config.debug:
+        config.log_level = "DEBUG"
+    return config
+
+
+config = MailsyncArgumentParser().get_args()
+config = process_config(config)

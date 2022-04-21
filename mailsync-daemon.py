@@ -19,7 +19,6 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 """
 
 import getpass
-import os
 from pathlib import Path
 import tempfile
 from time import sleep
@@ -28,28 +27,22 @@ from typing import Dict
 from daemonize import Daemonize
 import gnupg
 
+from config import config
 import isync_wrapper
 from journal_logger import logger as log
-from mailsync_argument_parser import MailsyncArgumentParser
-
-DEBUG = os.getenv("DEBUG_MAILSYNC") == "true"
-
-parser = MailsyncArgumentParser()
-
-cli_args = parser.get_args()
 
 pid = tempfile.mkstemp(prefix="mailsync_daemon")[1]
 
 # Gpg initialization
-if cli_args.gpghome_path:
-    home = cli_args.gpghome_path
+if config.gpghome_path:
+    home = config.gpghome_path
 else:
     home = str(Path.joinpath(Path.home(), ".gnupg"))
 gpg = gnupg.GPG(gnupghome=home)
 gpg.encoding = "utf-8"
 
 # Log keys
-if cli_args.print_keys and not cli_args.quiet:
+if config.print_keys and not config.quiet:
     log.info("Public keys:")
     for pub_key in gpg.list_keys():
         for k, v in pub_key.items():
@@ -60,12 +53,12 @@ if cli_args.print_keys and not cli_args.quiet:
             print(f"{k}: {v}")
 
 # Get gpg password
-gpg_password = cli_args.gpg_password
+gpg_password = config.gpg_password
 if not gpg_password:
     try:
         gpg_password = getpass.getpass()
     except Exception as error:
-        if not cli_args.quiet:
+        if not config.quiet:
             log.error("Error: Couldn't get the gpg master password")
             exit(1)
 
@@ -77,7 +70,7 @@ def get_email_pass(email: str, gpg_password: str, password_store_home: str) -> s
     ) as enc_f:
         dec_obj = gpg.decrypt_file(enc_f, passphrase=gpg_password)
         if not dec_obj.ok:
-            if not cli_args.quiet:
+            if not config.quiet:
                 log.error(f"Decryption failed with status: {dec_obj.status}")
             exit(1)
         else:
@@ -86,8 +79,8 @@ def get_email_pass(email: str, gpg_password: str, password_store_home: str) -> s
 
 credentials: Dict[str, str] = {}
 
-if cli_args.mbsyncrc_path:
-    mbsyncrc_path = cli_args.mbsyncrc_path
+if config.mbsyncrc_path:
+    mbsyncrc_path = config.mbsyncrc_path
 else:
     mbsyncrc_path = Path.joinpath(Path.home(), ".mbsyncrc")
 
@@ -96,19 +89,19 @@ with open(mbsyncrc_path, "r") as f:
         tokens = line.strip().split()
         if len(tokens) == 2 and tokens[0] == "User":
             credentials[tokens[1]] = get_email_pass(
-                tokens[1], gpg_password, cli_args.password_store_path
+                tokens[1], gpg_password, config.password_store_path
             ).strip("\n")
 
 
 # Periodically invoke custom isync with the extracted credentials
 def main():
     while True:
-        isync_wrapper.sync_all(cli_args.mbsync_binary_path, credentials, cli_args.quiet)
-        sleep(cli_args.frequency)
+        isync_wrapper.sync_all(config.mbsync_binary_path, credentials)
+        sleep(config.frequency)
 
 
-if DEBUG:
+if config.debug:
     main()
 else:
-    daemon = Daemonize(app="mailsync-daemon", pid=pid, action=main)
+    daemon = Daemonize(app=config.logger_name, pid=pid, action=main)
     daemon.start()
