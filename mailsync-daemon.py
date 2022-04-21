@@ -32,7 +32,7 @@ import isync_wrapper
 from journal_logger import logger as log
 from mailsync_argument_parser import MailsyncArgumentParser
 
-DEBUG = os.getenv("DEBUG_MAILSYNC")
+DEBUG = os.getenv("DEBUG_MAILSYNC") == "true"
 
 parser = MailsyncArgumentParser()
 
@@ -103,15 +103,11 @@ with open(mbsyncrc_path, "r") as f:
 # Periodically invoke custom isync with the extracted credentials
 def main():
     while True:
-        stdout_data = isync_wrapper.sync_all(
-            cli_args.mbsync_binary_path, credentials, cli_args.quiet
-        )
-        if not cli_args.quiet:
-            log.info(f"mbsync: {stdout_data}")
+        isync_wrapper.sync_all(cli_args.mbsync_binary_path, credentials, cli_args.quiet)
         sleep(cli_args.frequency)
 
 
-if DEBUG == "true":
+if DEBUG:
     main()
 else:
     daemon = Daemonize(app="mailsync-daemon", pid=pid, action=main)
