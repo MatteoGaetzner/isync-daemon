@@ -1,6 +1,8 @@
+"""This module takes care of logging related things."""
+
 import logging
 
-from systemd.journal import JournalHandler
+from systemd import journal
 
 from config import config
 
@@ -11,24 +13,17 @@ loglevelmap = {
     "ERROR": logging.ERROR,
 }
 
-# create logger
-logger = logging.getLogger(config.logger_name)
 
-logger.setLevel(loglevelmap[config.log_level])
+def get_logger(name):
+    # create logger
+    logger = logging.getLogger(name)
 
-# add handler
-if config.debug != "true":
-    logger.addHandler(JournalHandler())
+    # Set minimum log level for output
+    logger.setLevel(loglevelmap[config.log_level])
 
-# create console handler and set level to debug
-ch = logging.StreamHandler()
-ch.setLevel(loglevelmap[config.log_level])
+    # add handler
+    if config.debug != "true":
+        logger.addHandler(journal.JournalHandler())
+        logger.debug("Systemd journal handler set.")
 
-# create formatter
-formatter = logging.Formatter("[%(levelname)s]  %(name)s  %(asctime)s:  %(message)s")
-
-# add formatter to ch
-ch.setFormatter(formatter)
-
-# add ch to logger
-logger.addHandler(ch)
+    return logger

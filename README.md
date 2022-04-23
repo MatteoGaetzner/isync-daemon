@@ -10,15 +10,12 @@ that feeds in the necessary credentials.
 
 # Installation
 
-This daemon has been tested with python 3.10.3.
-Other versions haven't been tested, but it likely still
-works with most python 3 versions since `python-gnupg` (a gpg wrapper for python),
-and `daemonize` are its only dependencies apart from mbsync (isync).
+This daemon has been tested with python 3.10.3 on Arch Linux.
 
-To install `python-gnupg` and `daemonize`, run:
+To install dependencies, run:
 
 ```
-pip install python-gnupg daemonize
+pip install python-gnupg daemonize systemd-python
 ```
 
 To set up Neomutt and offline email access with it, I recommend

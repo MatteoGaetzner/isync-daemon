@@ -1,3 +1,5 @@
+""" This module takes care of command line argument processing and default configurations."""
+
 import argparse
 from pathlib import Path
 import sys
@@ -58,7 +60,7 @@ class MailsyncArgumentParser(argparse.ArgumentParser):
             (
                 "--logger-name",
                 "name of the logger (default: 'mailsync-daemon')",
-                "mailsync-daemon",
+                None,
                 str,
             ),
         ]
@@ -69,12 +71,12 @@ class MailsyncArgumentParser(argparse.ArgumentParser):
                 "print secret and public keys (useful for debugging home directory)",
                 False,
             ),
-            ("--quiet", "silence all outputs", False),
             (
                 "--debug",
-                "run this daemon in debug mode (will set LOG_LEVEL='DEBUG'), this will make it run in the foreground",
+                "run this daemon in debug mode (will set LOG_LEVEL='DEBUG')",
                 False,
             ),
+            ("--quiet", "silence all outputs", False),
         ]
 
         self.add_standard_arguments(arguments_std)
@@ -101,10 +103,10 @@ class MailsyncArgumentParser(argparse.ArgumentParser):
         return self.parse_args(sys.argv[1:])
 
 
-def process_config(config: argparse.Namespace) -> argparse.Namespace:
-    if config.debug:
-        config.log_level = "DEBUG"
-    return config
+def process_config(_config: argparse.Namespace) -> argparse.Namespace:
+    if _config.debug:
+        _config.log_level = "DEBUG"
+    return _config
 
 
 config = MailsyncArgumentParser().get_args()
