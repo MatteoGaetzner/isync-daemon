@@ -98,5 +98,5 @@ def main():
 if config.debug:
     main()
 else:
-    daemon = Daemonize(app=config.logger_name, pid=pid, action=main)
+    daemon = Daemonize(app=__name__, pid=pid, action=main)
     daemon.start()

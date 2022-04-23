@@ -49,13 +49,13 @@ at the same location, e.g. `~/.password-store/`.
 Run:
 
 ```
-./mailsync-daemon.py --quiet [options]
+./mailsync_daemon.py --quiet [options]
 ```
 
 For an overview regarding the available options, run:
 
 ```
-./mailsync-daemon.py -h
+./mailsync_daemon.py -h
 ```
 
 # Licensing

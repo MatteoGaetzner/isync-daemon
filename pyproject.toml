@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "mailsync-daemon-poetry"
+name = "mailsync_daemon-poetry"
 version = "0.1.0"
 description = "Poetry file for the mailsync daemon project"
 authors = ["Matteo Gätzner <m.gaetzner@gmx.de>"]

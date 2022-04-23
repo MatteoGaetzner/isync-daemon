@@ -57,12 +57,6 @@ class MailsyncArgumentParser(argparse.ArgumentParser):
                 "INFO",
                 str,
             ),
-            (
-                "--logger-name",
-                "name of the logger (default: 'mailsync-daemon')",
-                None,
-                str,
-            ),
         ]
 
         arguments_bool = [
