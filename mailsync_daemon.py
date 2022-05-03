@@ -26,6 +26,7 @@ from typing import Dict
 from daemonize import Daemonize
 import gnupg
 
+from colors import BColors, print_colored
 from config import config
 import isync_wrapper
 from journal_logger import get_logger
@@ -45,14 +46,18 @@ gpg.encoding = "utf-8"
 
 # Log keys
 if config.print_keys and not config.quiet:
-    log.info("Public keys:")
+    print_colored("Public keys:\n", BColors.BOLD)
     for pub_key in gpg.list_keys():
         for k, v in pub_key.items():
-            print(f"{k}: {v}")
-    log.info("Private keys:")
+            print(f"{BColors.OKCYAN}{k}{BColors.ENDC}: {v}")
+        print("\n")
+    print_colored("\n\nPrivate keys:\n", BColors.BOLD)
     for priv_key in gpg.list_keys(True):
         for k, v in priv_key.items():
-            print(f"{k}: {v}")
+            print(f"{BColors.OKCYAN}{k}{BColors.ENDC}: {v}")
+        print("\n")
+
+    sys.exit(0)
 
 # Get gpg password
 GPG_PASSWORD = config.gpg_password
@@ -66,7 +71,7 @@ def get_email_pass(email: str, gpg_password: str, password_store_home: str) -> s
         dec_obj = gpg.decrypt_file(enc_f, passphrase=gpg_password)
         if not dec_obj.ok:
             if not config.quiet:
-                log.error(f"Decryption failed with status: {dec_obj.status}")
+                print_colored(f"Error: {dec_obj.status}", BColors.FAIL)
             sys.exit(1)
         else:
             return str(dec_obj)

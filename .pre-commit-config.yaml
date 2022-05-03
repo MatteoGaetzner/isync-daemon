@@ -1,0 +1,23 @@
+repos:
+    - repo: https://github.com/psf/black
+      rev: 8ed3e3d07ea3e6d62e3e533e69f96a0ff148cd5d
+      hooks:
+        - id: black
+    - repo: https://github.com/pre-commit/pre-commit-hooks
+      rev: 5d1ab6d7f3e8f928c896232d2fb0ff95b3563ca6
+      hooks:
+        - id: check-added-large-files
+    - repo: local
+      hooks:
+        - id: pylint
+          name: pylint
+          entry: sh run_poetry_pylint.sh
+          language: system
+          always_run: true
+          pass_filenames: false
+        - id: create requirements
+          name: create requirements
+          entry: sh write_requirements.sh
+          language: system
+          always_run: true
+          pass_filenames: false
