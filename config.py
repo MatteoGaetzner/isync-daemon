@@ -42,7 +42,7 @@ class MailsyncArgumentParser(argparse.ArgumentParser):
             (
                 "--frequency",
                 "frequency with which to sync mailboxes; specify it in seconds (default: 120s)",
-                120,
+                60 * 5,
                 int,
             ),
             (
